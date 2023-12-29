@@ -1,8 +1,6 @@
 package Pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 public class LoginPage {
 
@@ -11,11 +9,20 @@ public class LoginPage {
     private final By usernameField = By.id("loginusername");
     private final By passwordField = By.id("loginpassword");
     private final By loginButton = By.xpath("//*[@id=\"logInModal\"]/div/div/div[3]/button[2]");
-    private final By logoutLink = By.id("logout2");
-    private final By userNameDisplay = By.id("nameofuser");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public Boolean isLoginSuccessful() {
+        try {
+            Alert alert = driver.switchTo().alert();
+            System.out.println("Alert message: " + alert.getText());
+            alert.accept(); // Accept the alert (close it)
+            return false;    // Assuming an alert means login failure
+        } catch (NoAlertPresentException e) {
+            return true;     // No alert means login success
+        }
     }
 
     public void clickOnLoginLink() {
@@ -34,21 +41,6 @@ public class LoginPage {
 
     public void clickOnLoginButton() {
         driver.findElement(loginButton).click();
-    }
-
-    public void clickOnLogoutLink() {
-        driver.findElement(logoutLink).click();
-    }
-
-    public String getUserName() {
-        return driver.findElement(userNameDisplay).getText();
-    }
-    
-    public boolean isLoginSuccessful() {
-        // Implement logic to check if login is successful on the new webpage
-        // You might need to add a specific condition to verify successful login
-        // For example, you can check if the logout link is displayed after login
-        return driver.findElement(logoutLink).isDisplayed();
     }
 
     public StorePage login(String username, String password) {
